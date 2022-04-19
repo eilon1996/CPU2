@@ -76,6 +76,7 @@ END PROCESS;
 end arc_sys;
 
 
+-------------- process3 --------------------
 PROCESS(valid, rst, clk, ena, detector)
 
 	BEGIN

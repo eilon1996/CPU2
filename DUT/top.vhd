@@ -76,14 +76,14 @@ END PROCESS;
 
 
 -------------- process3 --------------------
-PROCESS(valid, rst, clk, ena, detector)
+PROCESS(valid, rst, clk, ena)
     variable validCounter : INTEGER := 0;
     variable detector_buffer : std_logic := '0';
 
 	BEGIN
 		IF (ena = '0') THEN
 			validCounter := validCounter;
-			detector_buffer := detector;
+			detector_buffer := detector_buffer;
 		ELSIF (rst = '1') THEN
 			validCounter := 0;
 			detector_buffer := '0';
@@ -104,7 +104,7 @@ PROCESS(valid, rst, clk, ena, detector)
 		END IF;
 
 		detector <= detector_buffer;
-	END PROCESS;
+END PROCESS;
 
 
 

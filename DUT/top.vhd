@@ -23,12 +23,12 @@ SIGNAL x_previous2_subtruct : std_logic_vector(n-1 DOWNTO 0);
 SIGNAL x_previous1, x_previous2, diff : STD_LOGIC_VECTOR(n-1 downto 0);
 SIGNAL valid	: STD_LOGIC;
 SIGNAL cout	: STD_LOGIC;
-SIGNAL validCounter : INTEGER range 0 to m;
+
 
 BEGIN
 
 -------------- process1 --------------------
-PROCESS (x, rest, clk, ena)
+PROCESS (x, rst, clk, ena)
 
 		BEGIN
 			IF (ena = '0')	THEN
@@ -58,6 +58,7 @@ adder_pm: Adder port map(
 
 ------ calculate valid -----
 PROCESS(CLK, ena, rst, valid)
+
 BEGIN
 	IF (rst='1') then
 		valid <= '0';
@@ -73,41 +74,36 @@ BEGIN
 
 END PROCESS;
 
-end arc_sys;
-
 
 -------------- process3 --------------------
 PROCESS(valid, rst, clk, ena, detector)
+    variable validCounter : INTEGER := 0;
+    variable detector_buffer : std_logic := '0';
 
 	BEGIN
 		IF (ena = '0') THEN
-			validCounter <= validCounter;
-			IF (validCounter < m) THEN
-				detector <= '0';
-			ELSE
-				detector <= '1';
-			END IF;
-		ELSE IF (rst = '1') THEN
-
-			validCounter <= 0;
-			detector <= '0';
+			validCounter := validCounter;
+			detector_buffer := detector;
+		ELSIF (rst = '1') THEN
+			validCounter := 0;
+			detector_buffer := '0';
 
 		ELSIF (rising_edge(clk)) THEN
 
 			IF(valid = '1') THEN
-				validCounter <= validCounter + 1;
+				validCounter := validCounter + 1;
 			ELSE
-				validCounter <= 0;
+				validCounter := 0;
 			END IF;
 
-			IF (validCounter < m) THEN
-				detector <= '0';
+			IF (validCounter <= m) THEN
+				detector_buffer := '0';
 			ELSE
-				detector <= '1';
+				detector_buffer := '1';
 			END IF;
 		END IF;
 
-
+		detector <= detector_buffer;
 	END PROCESS;
 
 

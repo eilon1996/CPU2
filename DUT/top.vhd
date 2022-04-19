@@ -25,8 +25,24 @@ SIGNAL x_previous1, x_previous2, diff : STD_LOGIC_VECTOR(n-1 downto 0);
 SIGNAL valid	: STD_LOGIC;
 SIGNAL cout	: STD_LOGIC;
 
-
 BEGIN
+
+-------------- process1 --------------------
+PROCESS (x, rest, clk, ena)
+
+		BEGIN
+			IF (ena = '0')	THEN
+				x_previous2 <= x_previous2;
+				x_previous1 <= x_previous1;
+			ELSIF (rst = '1') THEN
+				x_previous2 <= (others => '0');
+				x_previous1 <= (others => '0');
+			ELSIF (rising_edge(clk)) THEN
+				x_previous2 <= x_previous1;
+				x_previous1 <= x;
+			END IF;
+		END PROCESS;
+
 
 
 -------------- process2 --------------------
@@ -40,7 +56,7 @@ adder_pm: Adder port map(
 	cout => cout  -- what to do with it
 );
 
-
+------ calculate valid -----
 PROCESS(CLK, ena, rst, valid)
 BEGIN
 	IF (rst='1') then
@@ -56,6 +72,8 @@ BEGIN
 	END IF;
 
 END PROCESS;
+
+
 
 
 end arc_sys;

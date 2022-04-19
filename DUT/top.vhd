@@ -1,10 +1,12 @@
+
+------------- create sub entities --------------
+
+------------- process1 entity --------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
-------------- create sub entities --------------
-
-------------- process1 entity --------------
+--------------------------------------------
 entity process1 is
 	generic (
 		n : positive := 8 ;
@@ -25,12 +27,12 @@ begin
 
 end process1_arc;
 
---------------------------------------------
+------------- process2 entity --------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
-------------- process2 entity --------------
+--------------------------------------------
 entity process2 is
 	generic (
 		n : positive := 8 ;
@@ -52,12 +54,12 @@ begin
 
 end process2_arc;
 
---------------------------------------------
+------------- process3 entity --------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
-------------- process3 entity --------------
+--------------------------------------------
 entity process3 is
 	generic (
 		n : positive := 8 ;
@@ -79,12 +81,12 @@ begin
 
 end process3_arc;
 
--------------------------------------------------------------
+------------- top entity --------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
-------------- top entity --------------
+-------------------------------------------------------------
 entity top is
 	generic (
 		n : positive := 8 ;
@@ -98,9 +100,8 @@ entity top is
 		detector : out std_logic
 	);
 end top;
-------------- complete the top Architecture code --------------
 architecture arc_sys of top is
-	------------- component declare --------------
+	------------- process declare --------------
 	------------- process1 --------------
 		component process1 is
 			port(

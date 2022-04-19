@@ -19,11 +19,11 @@ end top;
 ------------- complete the top Architecture code --------------
 architecture arc_sys of top is
 
-
 SIGNAL x_previous2_subtruct : std_logic_vector(n-1 DOWNTO 0);
 SIGNAL x_previous1, x_previous2, diff : STD_LOGIC_VECTOR(n-1 downto 0);
 SIGNAL valid	: STD_LOGIC;
 SIGNAL cout	: STD_LOGIC;
+SIGNAL validCounter : INTEGER range 0 to m;
 
 BEGIN
 
@@ -73,10 +73,45 @@ BEGIN
 
 END PROCESS;
 
-
-
-
 end arc_sys;
+
+
+PROCESS(valid, rst, clk, ena, detector)
+
+	BEGIN
+		IF (ena = '0') THEN
+			validCounter <= validCounter;
+			IF (validCounter < m) THEN
+				detector <= '0';
+			ELSE
+				detector <= '1';
+			END IF;
+		ELSE IF (rst = '1') THEN
+
+			validCounter <= 0;
+			detector <= '0';
+
+		ELSIF (rising_edge(clk)) THEN
+
+			IF(valid = '1') THEN
+				validCounter <= validCounter + 1;
+			ELSE
+				validCounter <= 0;
+			END IF;
+
+			IF (validCounter < m) THEN
+				detector <= '0';
+			ELSE
+				detector <= '1';
+			END IF;
+		END IF;
+
+
+	END PROCESS;
+
+
+
+END arc_sys;
 
 
 

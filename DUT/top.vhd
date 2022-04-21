@@ -52,12 +52,12 @@ adder_pm: Adder port map(
 	a => x_previous1,
 	b => x_previous2_subtruct,
 	cin => '0',		-- note that the diff need to be [diff - 1 = DetectionCode]
-					-- so we insted of puting 1 in the cin like subtraction should be, we put 0
-	s => diff
+	-- so we insted of puting 1 in the cin like subtraction should be, we put 0
+s => diff
 );					-- cout is not relevent to us, so we dont connect it
 
 ------ calculate valid -----
-PROCESS(CLK, ena, rst, valid)
+PROCESS(clk, ena, rst, valid)
 
 BEGIN
 	IF (rst='1') then
@@ -65,8 +65,8 @@ BEGIN
 	elsif (ena='0') then
 		valid <= valid;
 	elsif(falling_edge(clk)) THEN
-		if diff=DetectionCode and 							-- note that diff here is actually diff-1
-			0 <= DetectionCode and DetectionCode <= 3 then	-- check that DetectionCode is valid
+	if diff=DetectionCode and 							-- note that diff here is actually diff-1
+	0 <= DetectionCode and DetectionCode <= 3 then	-- check that DetectionCode is valid
 		valid <= '1';
 		else
 		valid <= '0';
@@ -97,7 +97,7 @@ PROCESS(valid, rst, clk, ena)
 				validCounter := 0;
 			END IF;
 
-			IF (validCounter < m) THEN
+			IF (validCounter <= m) THEN
 				detector_buffer := '0';
 			ELSE
 				detector_buffer := '1';

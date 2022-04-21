@@ -17,7 +17,7 @@ begin
 	L0 : top generic map (16,7,3) port map(rst,ena,clk,x,DetectionCode,detector);
 
 	--------- start of stimulus section ------------------
-		ena <= '1'
+		ena <= '1';
         gen_clk : process
         begin
 		  clk <= '0';

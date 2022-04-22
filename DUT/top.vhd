@@ -60,18 +60,12 @@ adder_pm: Adder port map(
 PROCESS(CLK, ena, rst, valid)
 
 BEGIN
-	IF (rst='1') then
-		valid <= '0';
-	elsif (ena='0') then
-		valid <= valid;
-	elsif(falling_edge(clk)) THEN
-		if diff=DetectionCode and 							-- note that diff here is actually diff-1
-			0 <= DetectionCode and DetectionCode <= 3 then	-- check that DetectionCode is valid
+	if diff=DetectionCode and 							-- note that diff here is actually diff-1
+		0 <= DetectionCode and DetectionCode <= 3 then	-- check that DetectionCode is valid
 		valid <= '1';
-		else
+	else
 		valid <= '0';
-		end if;
-	END IF;
+	end if;
 
 END PROCESS;
 

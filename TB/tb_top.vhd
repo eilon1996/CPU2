@@ -9,7 +9,7 @@ entity tb_top is
 	constant m : integer := 7;
 	constant k : integer := 3; -- where k=log2(m+1)
 end tb_top;
---------------------------------------------------------------------	
+--------------------------------------------------------------------
 
 architecture rtb of tb_top is
 
@@ -34,13 +34,13 @@ architecture rtb of tb_top is
 
 begin
 	L0 : top generic map (n,m,k) port map(rst,ena,clk, x, DetectionCode, detector);
-	
+
 	gen_clk : process
 				begin
 					clk <='1','0' after 50 ns;
 					wait;
 				end process;
-	
+
 	gen_x : process
 				begin
 					x <= (others => '0');
@@ -49,13 +49,17 @@ begin
 						x <= x+2;
 				  	end loop;
 				end process;
-				
+
 	gen_cond: process
-				begin			
+				begin
 					DetectionCode <= 0;
-					for i in 0 to 25 loop
-						wait for 100 ns;
-						DetectionCode <= DetectionCode + 1;
+					for j in 0 to 5 loop
+						for i in 1 to 3 loop
+							wait for 100 ns;
+							DetectionCode <= DetectionCode + 1;
+						end loop;
+							wait for 100 ns;
+							DetectionCode <= 0;
 					end loop;
 					wait;
 				end process;
@@ -64,14 +68,13 @@ begin
 				begin
 					rst <='1','0' after 200 ns;
 					wait;
-				end process; 	
+				end process;
 
 	gen_ena : process
 				begin
 					ena <='1','0' after 400 ns;
 					wait;
-				end process;			
-	
-		
-end architecture rtb;	
-		
+				end process;
+
+
+end architecture rtb;

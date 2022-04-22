@@ -22,7 +22,6 @@ architecture arc_sys of top is
 SIGNAL x_previous2_subtruct : std_logic_vector(n-1 DOWNTO 0);
 SIGNAL x_previous1, x_previous2, diff : STD_LOGIC_VECTOR(n-1 downto 0);
 SIGNAL valid	: STD_LOGIC;
-SIGNAL cout	: STD_LOGIC;
 
 
 BEGIN
@@ -52,26 +51,20 @@ adder_pm: Adder port map(
 	a => x_previous1,
 	b => x_previous2_subtruct,
 	cin => '0',		-- note that the diff need to be [diff - 1 = DetectionCode]
-	-- so we insted of puting 1 in the cin like subtraction should be, we put 0
-s => diff
+					-- so we insted of puting 1 in the cin like subtraction should be, we put 0
+	s => diff
 );					-- cout is not relevent to us, so we dont connect it
 
 ------ calculate valid -----
-PROCESS(clk, ena, rst, valid)
+PROCESS(DetectionCode, diff)	-- TODO: process 2 is not a process!! change it to concurent code
 
 BEGIN
-	IF (rst='1') then
-		valid <= '0';
-	elsif (ena='0') then
-		valid <= valid;
-	elsif(falling_edge(clk)) THEN
 	if diff=DetectionCode and 							-- note that diff here is actually diff-1
-	0 <= DetectionCode and DetectionCode <= 3 then	-- check that DetectionCode is valid
+		0 <= DetectionCode and DetectionCode <= 3 then	-- check that DetectionCode is valid
 		valid <= '1';
-		else
+	else
 		valid <= '0';
-		end if;
-	END IF;
+	end if;
 
 END PROCESS;
 
@@ -97,7 +90,7 @@ PROCESS(valid, rst, clk, ena)
 				validCounter := 0;
 			END IF;
 
-			IF (validCounter <= m) THEN
+			IF (validCounter < m) THEN
 				detector_buffer := '0';
 			ELSE
 				detector_buffer := '1';
